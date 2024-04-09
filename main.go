@@ -151,4 +151,8 @@ func main() {
 	fmt.Println("numero impar", gerar_numero_impar())
 	fmt.Println("numero impar", gerar_numero_impar())
 	fmt.Println("numero impar", gerar_numero_impar())
+
+	////
+
+	fmt.Println("////")
 }
