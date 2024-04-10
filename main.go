@@ -3,7 +3,13 @@ package main
 import (
 	"fmt"
 	"runtime"
+	"time"
 )
+
+type IPAddr [4]byte
+func(i IPAddr) String() string {
+  return fmt.Sprintf("IP3 -> %d.%d.%d.%d", i[0], i[1], i[2], i[3])
+}
 
 type meuTipo int
 var x meuTipo
@@ -12,6 +18,35 @@ var y int
 type Vertex struct {
 	X int
 	Y int
+}
+
+type MyType struct {
+	X, Y float64
+}
+
+func (v MyType) Scale(f float64) {
+	v.X = v.X * f
+	v.Y = v.Y * f
+}
+
+func (v *MyType) ScaleWithPointer(f float64) {
+	v.X = v.X * f
+	v.Y = v.Y * f
+}
+
+type Person struct {
+	Name string
+	Age  int
+}
+
+type AnotherPerson struct {
+	Name string
+	Age  int
+}
+
+// String() is a method from interface Stringer (defined in fmt package)
+func (p Person) String() string {
+	return fmt.Sprintf("esse metodo é chamado qdo o fmt vai printar algo na tela. Valor: %v (%v years)", p.Name, p.Age)
 }
 
 func soma_mais(y int) func(int) int {
@@ -29,6 +64,13 @@ func numero_impar() func() int {
 	return func() int {
 		impar += 2
 		return impar
+	}
+}
+
+func say(s string) {
+	for i := 0; i < 25; i++ {
+		time.Sleep(100 * time.Millisecond)
+		fmt.Println(s, i)
 	}
 }
 
@@ -151,6 +193,52 @@ func main() {
 	fmt.Println("numero impar", gerar_numero_impar())
 	fmt.Println("numero impar", gerar_numero_impar())
 	fmt.Println("numero impar", gerar_numero_impar())
+
+	////
+
+	fmt.Println("////")
+	my_type := MyType{3, 4}
+	my_type.Scale(10)
+	fmt.Println("X:", my_type.X, "| Y:", my_type.Y)
+	fmt.Println("---")
+	my_type.ScaleWithPointer(2)
+	fmt.Println("X:", my_type.X, "| Y:", my_type.Y)
+
+	////
+
+	fmt.Println("////")
+	person := Person{Age: 10, Name: "John"}
+	another_person := AnotherPerson{Age: 12, Name: "Mary"}
+	other_type := MyType{1, 2}
+	fmt.Println("Lets print the structs with fields names below")
+	fmt.Printf("%+v\n", person)
+	fmt.Printf("%+v\n", other_type)
+	fmt.Printf("%+v\n", another_person)
+	fmt.Println("===")
+	fmt.Println("Lets print the structs without fields names below")
+	fmt.Printf("%v\n", person)
+	fmt.Printf("%v\n", other_type)
+	fmt.Printf("%v\n", another_person)
+
+	////
+
+	fmt.Println("////")
+	hosts := map[string]IPAddr{
+		"loopback":  {127, 0, 0, 1},
+		"googleDNS": {8, 8, 8, 8},
+	}
+	for name, ip := range hosts {
+		fmt.Printf("%v: %v\n", name, ip)
+	}
+
+	////
+
+	fmt.Println("////")
+	fmt.Println("INICIO GO ROUTINES")
+	go say("R")
+	fmt.Println("MEIO GO ROUTINES")
+	say("S")
+	fmt.Println("FIM GO ROUTINES")
 
 	////
 
