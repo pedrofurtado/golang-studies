@@ -10,6 +10,7 @@ Tips for performance in Go
 
 - Use named variable returns in functions
 - Use fixed array size always possible
+- Concatenate string with Join
 - Define structs with longer fields first (string, int), short fields later (bool), and sub-structs at final
 
 ```bash
